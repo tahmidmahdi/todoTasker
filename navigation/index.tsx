@@ -30,11 +30,17 @@ import {
 } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => (
+const Navigation = ({
+  colorScheme,
+  userState,
+}: {
+  colorScheme: ColorSchemeName;
+  userState: string | undefined;
+}) => (
   <NavigationContainer
     linking={LinkingConfiguration}
     theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <RootNavigator />
+    <RootNavigator userState={userState} />
   </NavigationContainer>
 );
 
@@ -46,28 +52,36 @@ export default Navigation;
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Login"
-      component={Login}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Root"
-      component={BottomTabNavigator}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="NotFound"
-      component={NotFoundScreen}
-      options={{ title: 'Oops!' }}
-    />
-    <Stack.Group screenOptions={{ presentation: 'modal' }}>
-      <Stack.Screen name="Modal" component={ModalScreen} />
-    </Stack.Group>
-  </Stack.Navigator>
-);
+const RootNavigator: React.FC<{ userState?: string }> = ({ userState }) => {
+  console.log('----->', userState);
+  return (
+    <Stack.Navigator>
+      {userState ? (
+        <>
+          <Stack.Screen
+            name="Root"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: 'Oops!' }}
+          />
+          <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Screen name="Modal" component={ModalScreen} />
+          </Stack.Group>
+        </>
+      ) : (
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+      )}
+    </Stack.Navigator>
+  );
+};
 
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
@@ -107,11 +121,13 @@ const BottomTabNavigator = () => {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Profile"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="user-o" color={Colors[colorScheme].green} />
+          ),
         }}
       />
     </BottomTab.Navigator>
