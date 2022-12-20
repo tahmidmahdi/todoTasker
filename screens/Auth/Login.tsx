@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {
@@ -21,14 +22,31 @@ const { height } = Dimensions.get('window');
 
 const Login: React.FC = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const storeData = async (value: string) => {
+    try {
+      await AsyncStorage.setItem('@storage_Key', value);
+    } catch (e) {
+      // saving error
+    }
+  };
 
   const handleLogin = async (): Promise<void> => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(
+        auth,
+        emailAddress,
+        password,
+      );
+      if (response.user.email) {
+        storeData(response.user?.email)
+          .then(res => console.log(res, 'stored data'))
+          .catch(error => console.log(error));
+      }
       navigation.navigate('Root' as never);
       setLoading(false);
     } catch (error) {
@@ -55,7 +73,7 @@ const Login: React.FC = () => {
               placeholderTextColor="#808080"
               autoCapitalize="none"
               keyboardType="email-address"
-              onChange={event => setEmail(event.nativeEvent.text)}
+              onChange={event => setEmailAddress(event.nativeEvent.text)}
               style={styles.input}
             />
           </View>

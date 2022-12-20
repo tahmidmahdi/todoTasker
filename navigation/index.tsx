@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
+import useAuthentication from '../hooks/useAuthentication';
 import useColorScheme from '../hooks/useColorScheme';
 import Login from '../screens/Auth/Login';
 import ModalScreen from '../screens/ModalScreen';
@@ -30,17 +31,11 @@ import {
 } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-const Navigation = ({
-  colorScheme,
-  userState,
-}: {
-  colorScheme: ColorSchemeName;
-  userState: string | undefined;
-}) => (
+const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => (
   <NavigationContainer
     linking={LinkingConfiguration}
     theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <RootNavigator userState={userState} />
+    <RootNavigator />
   </NavigationContainer>
 );
 
@@ -52,11 +47,11 @@ export default Navigation;
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator: React.FC<{ userState?: string }> = ({ userState }) => {
-  console.log('----->', userState);
+const RootNavigator: React.FC = () => {
+  const { userDetails } = useAuthentication();
   return (
     <Stack.Navigator>
-      {userState ? (
+      {userDetails ? (
         <>
           <Stack.Screen
             name="Root"
@@ -125,9 +120,7 @@ const BottomTabNavigator = () => {
         component={TabTwoScreen}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="user-o" color={Colors[colorScheme].green} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="user-o" color={color} />,
         }}
       />
     </BottomTab.Navigator>
