@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
+import FloatingButton from '../components/FloatingButton/FloatingButton';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
@@ -16,6 +17,7 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => (
       darkColor="rgba(255,255,255,0.1)"
     />
     <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+    <FloatingButton />
   </View>
 );
 
