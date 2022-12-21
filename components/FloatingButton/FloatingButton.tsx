@@ -1,28 +1,50 @@
 import React, { useState } from 'react';
 
-import { FloatingAction } from 'react-native-floating-action';
+import { FAB, Portal } from 'react-native-paper';
 
-const actions = [
-  {
-    text: 'Task',
-    name: 'task',
-    position: 1,
-  },
-  {
-    text: 'List',
-    name: 'list',
-    position: 2,
-  },
-];
 const FloatingButton = () => {
-  const [clicked, setClicked] = useState(false);
+  const [state, setState] = useState({ open: false });
+
+  const onStateChange = ({ open }) => setState({ open });
+
+  const { open } = state;
+
   return (
-    <FloatingAction
-      actions={actions}
-      onPressItem={name => {
-        console.log(`selected button: ${name}`);
-      }}
-    />
+    <Portal>
+      <FAB.Group
+        open={open}
+        visible
+        icon={open ? 'close' : 'plus'}
+        color="white"
+        fabStyle={{ backgroundColor: '#006CFF', bottom: 40 }}
+        actions={[
+          {
+            icon: 'checkbox-marked-circle-outline',
+            label: 'Task',
+            onPress: () => console.log('Pressed task'),
+            color: '#006CFF',
+            labelStyle: { fontWeight: 'bold' },
+            labelTextColor: '#006CFF',
+          },
+          {
+            icon: 'format-list-checks',
+            label: 'List',
+            onPress: () => console.log('Pressed list'),
+            style: { marginBottom: 30 },
+            containerStyle: { marginBottom: 30 },
+            color: '#006CFF',
+            labelStyle: { fontWeight: 'bold' },
+            labelTextColor: '#006CFF',
+          },
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+      />
+    </Portal>
   );
 };
 
