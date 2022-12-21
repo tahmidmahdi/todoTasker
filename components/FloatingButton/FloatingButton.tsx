@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { FAB, Portal } from 'react-native-paper';
 
 const FloatingButton = () => {
+  const navigation = useNavigation();
   const [state, setState] = useState({ open: false });
 
   const onStateChange = ({ open }) => setState({ open });
@@ -21,7 +23,7 @@ const FloatingButton = () => {
           {
             icon: 'checkbox-marked-circle-outline',
             label: 'Task',
-            onPress: () => console.log('Pressed task'),
+            onPress: () => navigation.navigate('Task' as never),
             color: '#006CFF',
             labelStyle: { fontWeight: 'bold' },
             labelTextColor: '#006CFF',

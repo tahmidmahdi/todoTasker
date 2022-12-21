@@ -5,21 +5,24 @@ import FloatingButton from '../components/FloatingButton/FloatingButton';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => (
-  <View style={styles.container}>
-    <Text style={styles.title}>Tab One</Text>
-    <Pressable onPress={() => navigation.navigate('Login')}>
-      <Text>Back</Text>
-    </Pressable>
-    <View
-      style={styles.separator}
-      lightColor="#eee"
-      darkColor="rgba(255,255,255,0.1)"
-    />
-    <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    <FloatingButton />
-  </View>
-);
+const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
+  console.log(navigation);
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Tab One</Text>
+      <Pressable onPress={() => navigation.navigate('Login')}>
+        <Text>Back</Text>
+      </Pressable>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <FloatingButton />
+    </View>
+  );
+};
 
 export default TabOneScreen;
 

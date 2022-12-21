@@ -24,6 +24,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import Task from '../screens/Task/Task';
 import {
   RootStackParamList,
   RootTabParamList,
@@ -56,6 +57,11 @@ const RootNavigator: React.FC = () => {
           <Stack.Screen
             name="Root"
             component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Task"
+            component={Task}
             options={{ headerShown: false }}
           />
           <Stack.Screen
