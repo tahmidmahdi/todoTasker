@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: 'gray',
+    borderColor: '#bcbcbc',
   },
   innerCircle: {
     width: 10,
@@ -32,9 +32,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   active: {
-    borderColor: 'black',
+    borderColor: '#999999',
   },
   innerActive: {
-    backgroundColor: 'black',
+    backgroundColor: '#999999',
+    borderRadius: 10,
   },
 });

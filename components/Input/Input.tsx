@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, TextStyle, ViewStyle } from 'react-native';
 
 import Colors from '../../constants/Colors';
 
 const Input: React.FC<{
   placeholder: string;
   autoCorrect?: boolean;
-  cursorColor?: keyof typeof Colors.light;
+  cursorColor?: keyof typeof Colors;
   keyboardType?:
     | 'default'
     | 'number-pad'
@@ -17,19 +17,36 @@ const Input: React.FC<{
     | 'phone-pad'
     | 'url';
   multiline?: boolean;
-}> = ({ placeholder, autoCorrect, cursorColor, keyboardType, multiline }) => (
-  <TextInput
-    style={styles.input}
-    placeholder={placeholder}
-    autoCorrect={autoCorrect}
-    cursorColor={cursorColor}
-    keyboardType={keyboardType}
-    multiline={multiline}
-  />
-);
+  setText: React.Dispatch<React.SetStateAction<string>>;
+  style?: TextStyle | ViewStyle;
+}> = ({
+  placeholder,
+  autoCorrect,
+  cursorColor,
+  keyboardType,
+  multiline,
+  setText,
+  style,
+}) => {
+  const styles = StyleSheet.create({
+    input: {},
+    customStyle: {
+      ...style,
+    },
+  });
+
+  const inputStyles = StyleSheet.compose(styles.input, styles.customStyle);
+  return (
+    <TextInput
+      style={inputStyles}
+      placeholder={placeholder}
+      autoCorrect={autoCorrect}
+      cursorColor={cursorColor}
+      keyboardType={keyboardType}
+      multiline={multiline}
+      onChange={event => setText(event.nativeEvent.text)}
+    />
+  );
+};
 
 export default Input;
-
-const styles = StyleSheet.create({
-  input: {},
-});
