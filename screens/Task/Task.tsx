@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
+import moment from 'moment';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Input from '../../components/Input/Input';
@@ -18,20 +22,36 @@ const Task = () => {
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState('');
   const [todoTypes, setTodoTypes] = useState<string>('inbox');
+  const [visible, setVisible] = useState(false);
 
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
   const handleSubmitTodo = async (): Promise<void> => {
     if (text !== '') {
       try {
-        const storeTodo = await addDoc(collection(db, 'todos'), {
+        await addDoc(collection(db, 'todos'), {
           todo: text,
           completed: checked,
           types: todoTypes,
-          time: 'December 22,2022 ar 4:04:00 PM UTC+6',
+          time: moment().format('MMMM Do YYYY [at] h:mm:ss A'),
         });
-        console.log(storeTodo);
+        showMessage({
+          message: 'Todo added successfully!',
+          type: 'success',
+          hideStatusBar: true,
+          icon: 'success',
+        });
       } catch (error) {
-        console.log(error);
+        showMessage({
+          message: 'Failed to add todo. Please try again later!',
+          type: 'danger',
+          hideStatusBar: true,
+          icon: 'danger',
+        });
       }
+    } else {
+      showDialog();
     }
   };
 
@@ -57,6 +77,19 @@ const Task = () => {
             style={{ marginLeft: 20 }}
           />
         </View>
+        <View>
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Title>Alert</Dialog.Title>
+              <Dialog.Content>
+                <Paragraph>Text field can not be empty!</Paragraph>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={hideDialog}>Done</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -71,8 +104,6 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 20,
     marginVertical: 30,
-    borderWidth: 1,
-    borderColor: 'red',
   },
   actionButtons: {
     flexDirection: 'row',

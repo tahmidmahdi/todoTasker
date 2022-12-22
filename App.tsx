@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import FlashMessage from 'react-native-flash-message';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -20,6 +21,7 @@ const App = () => {
         <Navigation colorScheme={colorScheme} />
         <StatusBar />
       </SafeAreaProvider>
+      <FlashMessage position="top" />
     </PaperProvider>
   );
 };
