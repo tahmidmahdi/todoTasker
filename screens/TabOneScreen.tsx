@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -7,6 +8,9 @@ import { RootTabScreenProps } from '../types';
 
 const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
   console.log(navigation);
+  const route = useRoute();
+  console.log(route.name);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>

@@ -27,8 +27,6 @@ const TabTwoScreen: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    console.log('clicked');
-
     try {
       const logoutState = await signOut(auth);
       console.log(logoutState, 'logout state');
