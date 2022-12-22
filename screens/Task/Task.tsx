@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
 import moment from 'moment';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -17,8 +17,6 @@ import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
 
 const Task = () => {
-  const route = useRoute();
-  console.log(route.name);
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
 
@@ -26,10 +24,21 @@ const Task = () => {
   const [text, setText] = useState('');
   const [todoTypes, setTodoTypes] = useState<string>('inbox');
   const [visible, setVisible] = useState(false);
+  const [todayDate, setTodayDate] = useState<string | undefined>();
 
   const showDialog = () => setVisible(true);
 
   const hideDialog = () => setVisible(false);
+
+  const dateObj = new Date();
+  const month = dateObj.getUTCMonth() + 1; // months from 1-12
+  const days = dateObj.getUTCDate();
+  const year = dateObj.getUTCFullYear();
+
+  useEffect(() => {
+    setTodayDate(`${year}-${month}-${days}`);
+  }, []);
+
   const handleSubmitTodo = async (): Promise<void> => {
     if (text !== '') {
       try {
@@ -80,53 +89,47 @@ const Task = () => {
             style={{ marginLeft: 20 }}
           />
         </View>
-        <Calendar
-          // Initially visible month. Default = now
-          initialDate="2022-03-01"
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          // Handler which gets executed on day press. Default = undefined
-          onDayPress={day => {
-            console.log('selected day', day);
-          }}
-          // Handler which gets executed on day long press. Default = undefined
-          onDayLongPress={day => {
-            console.log('selected day', day);
-          }}
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat="yyyy MM"
-          // Handler which gets executed when visible month changes in calendar. Default = undefined
-          onMonthChange={month => {
-            console.log('month changed', month);
-          }}
-          // Hide month navigation arrows. Default = false
-          hideArrows
-          // Replace default arrows with custom ones (direction can be 'left' or 'right')
-
-          // Do not show days of other months in month page. Default = false
-          hideExtraDays
-          // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
-          // day from another month that is visible in calendar page. Default = false
-          disableMonthChange
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
-          firstDay={1}
-          // Hide day names. Default = false
-          hideDayNames
-          // Show week numbers to the left. Default = false
-          showWeekNumbers
-          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-          onPressArrowLeft={subtractMonth => subtractMonth()}
-          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-          onPressArrowRight={addMonth => addMonth()}
-          // Disable left arrow. Default = false
-          disableArrowLeft
-          // Disable right arrow. Default = false
-          disableArrowRight
-          // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-          disableAllTouchEventsForDisabledDays
-          // Replace default month and year title with custom one. the function receive a date as parameter
-          // Enable the option to swipe between months. Default = false
-          enableSwipeMonths
-        />
+        <View style={styles.calendar}>
+          <Calendar
+            initialDate={todayDate}
+            minDate={todayDate}
+            onDayPress={day => {
+              console.log('selected day', day);
+            }}
+            firstDay={1}
+            showWeekNumbers
+            onPressArrowLeft={subtractMonth => subtractMonth()}
+            onPressArrowRight={addMonth => addMonth()}
+            disableAllTouchEventsForDisabledDays
+            enableSwipeMonths
+            theme={{
+              backgroundColor: '#ffffff',
+              calendarBackground: '#ffffff',
+              textSectionTitleColor: '#b6c1cd',
+              textSectionTitleDisabledColor: '#d9e1e8',
+              selectedDayBackgroundColor: '#00adf5',
+              selectedDayTextColor: '#ffffff',
+              todayTextColor: '#00adf5',
+              dayTextColor: '#2d4150',
+              textDisabledColor: '#d9e1e8',
+              dotColor: '#00adf5',
+              selectedDotColor: '#ffffff',
+              arrowColor: 'orange',
+              disabledArrowColor: '#d9e1e8',
+              monthTextColor: 'blue',
+              indicatorColor: 'blue',
+              textDayFontFamily: 'monospace',
+              textMonthFontFamily: 'monospace',
+              textDayHeaderFontFamily: 'monospace',
+              textDayFontWeight: '800',
+              textMonthFontWeight: 'bold',
+              textDayHeaderFontWeight: '300',
+              textDayFontSize: 16,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 24,
+            }}
+          />
+        </View>
         <View>
           <Portal>
             <Dialog visible={visible} onDismiss={hideDialog}>
@@ -150,6 +153,7 @@ export default Task;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   main: {
     paddingHorizontal: 20,
@@ -173,4 +177,5 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flexDirection: 'row',
   },
+  calendar: {},
 });
