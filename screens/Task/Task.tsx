@@ -7,6 +7,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import moment from 'moment';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CalendarMain from '../../components/Calendar/CalendarMain';
@@ -135,6 +136,19 @@ const Task = () => {
             </View>
           </View>
           {selectedOption.calendar && <CalendarMain todayDate={todayDate} />}
+        </View>
+        <View>
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Title>Alert</Dialog.Title>
+              <Dialog.Content>
+                <Paragraph>Text field can not be empty!</Paragraph>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={hideDialog}>Done</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
       </View>
     </SafeAreaView>
