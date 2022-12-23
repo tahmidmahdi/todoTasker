@@ -14,6 +14,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { auth } from '../../config/firebase-config';
@@ -42,6 +43,8 @@ const Login: React.FC = () => {
         emailAddress,
         password,
       );
+      console.log(response);
+
       if (response.user.email) {
         storeData(response.user?.email)
           .then(res => console.log(res, 'stored data'))
@@ -49,8 +52,25 @@ const Login: React.FC = () => {
       }
       navigation.navigate('Root' as never);
       setLoading(false);
+      showMessage({
+        message: 'Login successful!',
+        type: 'success',
+        hideStatusBar: true,
+        icon: 'success',
+        duration: 3000,
+      });
     } catch (error) {
       setLoading(false);
+      showMessage({
+        message:
+          error?.code === 'auth/user-not-found'
+            ? 'Wrong Email or Password'
+            : error.code,
+        type: 'danger',
+        hideStatusBar: true,
+        icon: 'danger',
+        duration: 5000,
+      });
     }
   };
   return (

@@ -15,9 +15,12 @@ import Input from '../../components/Input/Input';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import { db } from '../../config/firebase-config';
 import Colors from '../../constants/Colors';
+import useAuthentication from '../../hooks/useAuthentication';
 
 const Task = () => {
   const navigation = useNavigation();
+  const { userDetails } = useAuthentication();
+
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState('');
   const [todoTypes, setTodoTypes] = useState<string>('inbox');
@@ -48,6 +51,7 @@ const Task = () => {
           completed: checked,
           types: todoTypes,
           time: calendarDate || moment().format('MMMM Do YYYY [at] h:mm:ss A'),
+          uid: userDetails?.uid,
         });
         showMessage({
           message: 'Todo added successfully!',
