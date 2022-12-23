@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useEffect, useState } from 'react';
 
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
 import moment from 'moment';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
-import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import CalendarMain from '../../components/Calendar/CalendarMain';
 import Input from '../../components/Input/Input';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import { db } from '../../config/firebase-config';
@@ -25,6 +25,13 @@ const Task = () => {
   const [todoTypes, setTodoTypes] = useState<string>('inbox');
   const [visible, setVisible] = useState(false);
   const [todayDate, setTodayDate] = useState<string | undefined>();
+  const [selectedOption, setSelectedOption] = useState<{
+    calendar: boolean;
+    time: boolean;
+  }>({
+    calendar: false,
+    time: false,
+  });
 
   const showDialog = () => setVisible(true);
 
@@ -69,7 +76,7 @@ const Task = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.main}>
+      <View style={styles.main}>
         {/* action buttons */}
         <View style={styles.actionButtons}>
           <Pressable onPress={() => navigation.navigate('Root' as never)}>
@@ -89,61 +96,47 @@ const Task = () => {
             style={{ marginLeft: 20 }}
           />
         </View>
-        <View style={styles.calendar}>
-          <Calendar
-            initialDate={todayDate}
-            minDate={todayDate}
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            firstDay={1}
-            showWeekNumbers
-            onPressArrowLeft={subtractMonth => subtractMonth()}
-            onPressArrowRight={addMonth => addMonth()}
-            disableAllTouchEventsForDisabledDays
-            enableSwipeMonths
-            theme={{
-              backgroundColor: '#ffffff',
-              calendarBackground: '#ffffff',
-              textSectionTitleColor: '#b6c1cd',
-              textSectionTitleDisabledColor: '#d9e1e8',
-              selectedDayBackgroundColor: '#00adf5',
-              selectedDayTextColor: '#ffffff',
-              todayTextColor: '#00adf5',
-              dayTextColor: '#2d4150',
-              textDisabledColor: '#d9e1e8',
-              dotColor: '#00adf5',
-              selectedDotColor: '#ffffff',
-              arrowColor: 'orange',
-              disabledArrowColor: '#d9e1e8',
-              monthTextColor: 'blue',
-              indicatorColor: 'blue',
-              textDayFontFamily: 'monospace',
-              textMonthFontFamily: 'monospace',
-              textDayHeaderFontFamily: 'monospace',
-              textDayFontWeight: '800',
-              textMonthFontWeight: 'bold',
-              textDayHeaderFontWeight: '300',
-              textDayFontSize: 16,
-              textMonthFontSize: 16,
-              textDayHeaderFontSize: 24,
-            }}
-          />
+
+        <View style={styles.bottomMain}>
+          <View style={styles.bottomSection}>
+            <View style={styles.timeSection}>
+              <FontAwesome
+                name="calendar-o"
+                size={20}
+                onPress={() =>
+                  setSelectedOption({
+                    ...selectedOption,
+                    calendar: !selectedOption.calendar,
+                  })
+                }
+                style={{
+                  color: selectedOption.calendar
+                    ? Colors.light.blue
+                    : '#999999',
+                }}
+              />
+              <AntDesign
+                name="clockcircleo"
+                size={20}
+                style={{
+                  marginLeft: 30,
+                  color: selectedOption.time ? Colors.light.blue : '#999999',
+                }}
+                onPress={() =>
+                  setSelectedOption({
+                    ...selectedOption,
+                    time: !selectedOption.time,
+                  })
+                }
+              />
+            </View>
+            <View>
+              <Text>Inbox</Text>
+            </View>
+          </View>
+          {selectedOption.calendar && <CalendarMain todayDate={todayDate} />}
         </View>
-        <View>
-          <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog}>
-              <Dialog.Title>Alert</Dialog.Title>
-              <Dialog.Content>
-                <Paragraph>Text field can not be empty!</Paragraph>
-              </Dialog.Content>
-              <Dialog.Actions>
-                <Button onPress={hideDialog}>Done</Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
-        </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -156,6 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   main: {
+    flex: 1,
     paddingHorizontal: 20,
     marginVertical: 30,
   },
@@ -177,5 +171,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flexDirection: 'row',
   },
-  calendar: {},
+  bottomMain: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  bottomSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timeSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
