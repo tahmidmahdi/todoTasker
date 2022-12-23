@@ -15,12 +15,9 @@ import Input from '../../components/Input/Input';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import { db } from '../../config/firebase-config';
 import Colors from '../../constants/Colors';
-import useColorScheme from '../../hooks/useColorScheme';
 
 const Task = () => {
   const navigation = useNavigation();
-  const colorScheme = useColorScheme();
-
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState('');
   const [todoTypes, setTodoTypes] = useState<string>('inbox');
@@ -33,19 +30,15 @@ const Task = () => {
     calendar: false,
     time: false,
   });
+  const [calendarDate, setCalendarDate] = useState<string>('');
 
   const showDialog = () => setVisible(true);
-
   const hideDialog = () => setVisible(false);
 
   const dateObj = new Date();
   const month = dateObj.getUTCMonth() + 1; // months from 1-12
   const days = dateObj.getUTCDate();
   const year = dateObj.getUTCFullYear();
-
-  useEffect(() => {
-    setTodayDate(`${year}-${month}-${days}`);
-  }, []);
 
   const handleSubmitTodo = async (): Promise<void> => {
     if (text !== '') {
@@ -54,7 +47,7 @@ const Task = () => {
           todo: text,
           completed: checked,
           types: todoTypes,
-          time: moment().format('MMMM Do YYYY [at] h:mm:ss A'),
+          time: calendarDate || moment().format('MMMM Do YYYY [at] h:mm:ss A'),
         });
         showMessage({
           message: 'Todo added successfully!',
@@ -74,6 +67,10 @@ const Task = () => {
       showDialog();
     }
   };
+
+  useEffect(() => {
+    setTodayDate(`${year}-${month}-${days}`);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,7 +132,12 @@ const Task = () => {
               <Text>Inbox</Text>
             </View>
           </View>
-          {selectedOption.calendar && <CalendarMain todayDate={todayDate} />}
+          {selectedOption.calendar && (
+            <CalendarMain
+              setCalendarDate={setCalendarDate}
+              todayDate={todayDate}
+            />
+          )}
         </View>
         <View>
           <Portal>
