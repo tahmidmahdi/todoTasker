@@ -58,7 +58,9 @@ const Task = () => {
           type: 'success',
           hideStatusBar: true,
           icon: 'success',
+          duration: 5000,
         });
+        navigation.navigate('Root' as never);
       } catch (error) {
         showMessage({
           message: 'Failed to add todo. Please try again later!',
@@ -70,6 +72,13 @@ const Task = () => {
     } else {
       showDialog();
     }
+  };
+
+  const handleCalender = () => {
+    setSelectedOption({
+      calendar: false,
+      time: false,
+    });
   };
 
   useEffect(() => {
@@ -89,7 +98,7 @@ const Task = () => {
           </Pressable>
         </View>
         {/* taking inputs */}
-        <View style={styles.inputSection}>
+        <View style={styles.inputSection} onTouchStart={handleCalender}>
           <RadioButton checked={checked} setChecked={setChecked} />
           <Input
             placeholder="What do you want to do?"
