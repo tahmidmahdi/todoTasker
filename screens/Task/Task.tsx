@@ -5,18 +5,21 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
 import moment from 'moment';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CalendarMain from '../../components/Calendar/CalendarMain';
 import Input from '../../components/Input/Input';
+import ListMain from '../../components/List/Index';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import { db } from '../../config/firebase-config';
 import Colors from '../../constants/Colors';
+import capitalizeFirstLetter from '../../hooks/firstLetterUppercase';
 import useAuthentication from '../../hooks/useAuthentication';
 
+const { height, width } = Dimensions.get('window');
 const Task = () => {
   const navigation = useNavigation();
   const { userDetails } = useAuthentication();
@@ -34,6 +37,7 @@ const Task = () => {
     time: false,
   });
   const [calendarDate, setCalendarDate] = useState<string>('');
+  const [listOpen, setListOpen] = useState<boolean>(false);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -74,6 +78,10 @@ const Task = () => {
     }
   };
 
+  const handleListOpen = () => {
+    setListOpen(!listOpen);
+  };
+
   const handleCalender = () => {
     setSelectedOption({
       calendar: false,
@@ -84,6 +92,18 @@ const Task = () => {
   useEffect(() => {
     setTodayDate(`${year}-${month}-${days}`);
   }, []);
+
+  useEffect(() => {
+    if (listOpen) {
+      setSelectedOption({
+        ...selectedOption,
+        calendar: false,
+      });
+    }
+    if (selectedOption.calendar) {
+      setListOpen(false);
+    }
+  }, [listOpen, selectedOption.calendar]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,7 +129,7 @@ const Task = () => {
         </View>
 
         <View style={styles.bottomMain}>
-          <View style={styles.bottomSection}>
+          <View style={[styles.bottomSection, listOpen && styles.listActive]}>
             <View style={styles.timeSection}>
               <FontAwesome
                 name="calendar-o"
@@ -141,14 +161,21 @@ const Task = () => {
                 }
               />
             </View>
-            <View>
-              <Text>Inbox</Text>
-            </View>
+            <Pressable onPress={handleListOpen}>
+              <Text>{capitalizeFirstLetter(todoTypes)}</Text>
+            </Pressable>
           </View>
           {selectedOption.calendar && (
             <CalendarMain
               setCalendarDate={setCalendarDate}
               todayDate={todayDate}
+            />
+          )}
+          {listOpen && (
+            <ListMain
+              todoTypes={todoTypes}
+              setTodoTypes={setTodoTypes}
+              setListOpen={setListOpen}
             />
           )}
         </View>
@@ -201,12 +228,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bottomMain: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    height: 'auto',
+    bottom: 0,
+    position: 'absolute',
+    width,
+    paddingHorizontal: 20,
   },
   bottomSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  listActive: {
+    marginBottom: 20,
   },
   timeSection: {
     flexDirection: 'row',

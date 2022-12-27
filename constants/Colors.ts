@@ -13,7 +13,7 @@ export default {
     purple: '#B678FF',
     yellow: '#FFE761',
     red: '#F45E6D',
-    green: ' #61DEA4',
+    green: '#61DEA4',
     disabled: '#EBEFF5',
   },
   dark: {
@@ -27,7 +27,7 @@ export default {
     purple: '#B678FF',
     yellow: '#FFE761',
     red: '#F45E6D',
-    green: ' #61DEA4',
+    green: '#61DEA4',
     disabled: '#EBEFF5',
   },
 };
