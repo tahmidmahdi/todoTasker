@@ -9,7 +9,8 @@ import Colors from '../../constants/Colors';
 const ListMain: React.FC<{
   todoTypes: string;
   setTodoTypes: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ todoTypes, setTodoTypes }) => {
+  setListOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ todoTypes, setTodoTypes, setListOpen }) => {
   const list = ({ item }) => {
     const { name, color, backgroundColor } = item;
     const toggleSelection = (todoName: string) => {

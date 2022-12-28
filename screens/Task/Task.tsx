@@ -162,7 +162,9 @@ const Task = () => {
               />
             </View>
             <Pressable onPress={handleListOpen}>
-              <Text>{capitalizeFirstLetter(todoTypes)}</Text>
+              <Text style={{ fontWeight: 'bold' }}>
+                {capitalizeFirstLetter(todoTypes)}
+              </Text>
             </Pressable>
           </View>
           {selectedOption.calendar && (

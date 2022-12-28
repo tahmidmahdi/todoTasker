@@ -1,14 +1,19 @@
 import React from 'react';
 
+import { FontAwesome5 } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
+
+import Colors from '../../constants/Colors';
 
 const RadioButton: React.FC<{
   checked: boolean;
   setChecked: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ checked, setChecked }) => (
   <Pressable style={styles.container} onPress={() => setChecked(!checked)}>
-    <View style={[styles.outerCircle, checked && styles.active]}>
-      <View style={[styles.innerCircle, checked && styles.innerActive]} />
+    <View style={[styles.outerCircle, checked && styles.outerActive]}>
+      <View style={[styles.innerCircle, checked && styles.innerActive]}>
+        <FontAwesome5 name="check" size={12} color="white" />
+      </View>
     </View>
   </Pressable>
 );
@@ -27,15 +32,16 @@ const styles = StyleSheet.create({
     borderColor: '#bcbcbc',
   },
   innerCircle: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  active: {
-    borderColor: '#999999',
+  outerActive: {
+    borderColor: 'transparent',
   },
   innerActive: {
-    backgroundColor: '#999999',
+    backgroundColor: Colors.light.blue,
     borderRadius: 10,
   },
 });

@@ -1,18 +1,42 @@
-import { useRoute } from '@react-navigation/native';
-import { StyleSheet, Text } from 'react-native';
+import { useEffect, useState } from 'react';
+
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { StyleSheet } from 'react-native';
 
 import FloatingButton from '../components/FloatingButton/FloatingButton';
 import { View } from '../components/Themed';
+import { db } from '../config/firebase-config';
+import useAuthentication from '../hooks/useAuthentication';
 import { RootTabScreenProps } from '../types';
 
 const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
-  console.log(navigation);
-  const route = useRoute();
-  console.log(route.name);
+  const { userDetails } = useAuthentication();
+
+  const [loading, setLoading] = useState(false);
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    if (userDetails?.uid) {
+      const q = query(
+        collection(db, 'todos'),
+        where('uid', '==', userDetails.uid),
+      );
+      const notesListenerSubscription = onSnapshot(q, querySnapshot => {
+        const list: Array<unknown> = [];
+        querySnapshot.forEach(doc => {
+          list.push({ ...doc.data(), id: doc.id });
+        });
+        setNotes(list as never);
+        setLoading(false);
+      });
+      return notesListenerSubscription;
+    }
+    return () => null;
+  }, [userDetails?.uid]);
+  console.log(notes);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
       <FloatingButton visible />
     </View>
   );
