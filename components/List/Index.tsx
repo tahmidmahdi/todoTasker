@@ -5,7 +5,7 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { db } from '../../config/firebase-config';
-import taskList from '../../config/taskList';
+import taskList, { taskListType } from '../../config/taskList';
 import Colors from '../../constants/Colors';
 import useAuthentication from '../../hooks/useAuthentication';
 
@@ -27,7 +27,9 @@ const ListMain: React.FC<{
   const [notes, setNotes] = useState<Array<ListProps>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const list = ({ item }) => {
+  const list: React.FC<{
+    item: taskListType;
+  }> = ({ item }) => {
     const { name, color, backgroundColor } = item;
     const toggleSelection = (todoName: string) => {
       setTodoTypes(todoName);
@@ -63,9 +65,7 @@ const ListMain: React.FC<{
       note => note.types.toLowerCase() === name.toLowerCase(),
     );
     return (
-      <Pressable
-        style={styles.container}
-        onPress={() => toggleSelection(name as string)}>
+      <Pressable style={styles.container} onPress={() => toggleSelection(name)}>
         <View style={styles.main}>
           <Text style={styles.listText}>{name}</Text>
           <Text>{listCheck.length} tasks</Text>
@@ -78,6 +78,8 @@ const ListMain: React.FC<{
       </Pressable>
     );
   };
+
+  const handleSeparator = () => <View style={{ height: 10 }} />;
 
   useEffect(() => {
     if (userDetails?.uid) {
@@ -103,7 +105,7 @@ const ListMain: React.FC<{
       data={taskList}
       renderItem={list}
       keyExtractor={item => item.name}
-      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+      ItemSeparatorComponent={handleSeparator}
       contentContainerStyle={{
         flex: 1,
         justifyContent: 'flex-end',
