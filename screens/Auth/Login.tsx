@@ -43,7 +43,6 @@ const Login: React.FC = () => {
         emailAddress,
         password,
       );
-      console.log(response);
 
       if (response.user.email) {
         storeData(response.user?.email)
@@ -55,9 +54,9 @@ const Login: React.FC = () => {
       showMessage({
         message: 'Login successful!',
         type: 'success',
-        hideStatusBar: true,
+        statusBarHeight: 50,
         icon: 'success',
-        duration: 3000,
+        duration: 5000,
       });
     } catch (error) {
       setLoading(false);
@@ -67,7 +66,7 @@ const Login: React.FC = () => {
             ? 'Wrong Email or Password'
             : error.code,
         type: 'danger',
-        hideStatusBar: true,
+        statusBarHeight: 50,
         icon: 'danger',
         duration: 5000,
       });

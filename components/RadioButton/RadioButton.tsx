@@ -7,16 +7,21 @@ import Colors from '../../constants/Colors';
 
 const RadioButton: React.FC<{
   checked: boolean;
-  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ checked, setChecked }) => (
-  <Pressable style={styles.container} onPress={() => setChecked(!checked)}>
-    <View style={[styles.outerCircle, checked && styles.outerActive]}>
-      <View style={[styles.innerCircle, checked && styles.innerActive]}>
-        <FontAwesome5 name="check" size={12} color="white" />
+  setChecked?: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+}> = ({ checked, setChecked }) => {
+  const handleChecked = () => {
+    if (setChecked) setChecked(!checked);
+  };
+  return (
+    <Pressable style={styles.container} onPress={handleChecked}>
+      <View style={[styles.outerCircle, checked && styles.outerActive]}>
+        <View style={[styles.innerCircle, checked && styles.innerActive]}>
+          <FontAwesome5 name="check" size={12} color="white" />
+        </View>
       </View>
-    </View>
-  </Pressable>
-);
+    </Pressable>
+  );
+};
 
 export default RadioButton;
 

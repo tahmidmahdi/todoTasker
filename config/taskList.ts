@@ -1,6 +1,6 @@
 import Colors from '../constants/Colors';
 
-interface taskListType {
+export interface taskListType {
   id: number;
   name: string;
   backgroundColor: string;

@@ -42,10 +42,11 @@ const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => (
 
 export default Navigation;
 
-/**
+/*
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator: React.FC = () => {
@@ -105,7 +106,9 @@ const BottomTabNavigator = () => {
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'Today',
           headerTitleStyle: { fontWeight: 'bold', fontSize: 32 },
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="calendar-o" color={color} />
+          ),
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}

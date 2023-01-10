@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { signOut } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 
 import { Text, View } from '../components/Themed';
-import { auth } from '../config/firebase-config';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 
@@ -26,13 +26,28 @@ const TabTwoScreen: React.FC = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      const logoutState = await signOut(auth);
-      console.log(logoutState, 'logout state');
-    } catch (error) {
-      console.log(error);
-    }
+  const handleLogout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        showMessage({
+          type: 'success',
+          message: 'Successfully Logged Out',
+          icon: 'success',
+          statusBarHeight: 50,
+          duration: 5000,
+        });
+      })
+      .catch(error => {
+        showMessage({
+          message: 'Error',
+          description: "There's an error while logging out",
+          type: 'danger',
+          icon: 'danger',
+          statusBarHeight: 50,
+          duration: 5000,
+        });
+      });
   };
 
   useEffect(() => {

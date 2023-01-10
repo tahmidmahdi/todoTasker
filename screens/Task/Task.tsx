@@ -54,13 +54,13 @@ const Task = () => {
           todo: text,
           completed: checked,
           types: todoTypes,
-          time: calendarDate || moment().format('MMMM Do YYYY [at] h:mm:ss A'),
+          time: calendarDate || moment().format('MMMM Do YYYY'),
           uid: userDetails?.uid,
         });
         showMessage({
           message: 'Todo added successfully!',
           type: 'success',
-          hideStatusBar: true,
+          statusBarHeight: 50,
           icon: 'success',
           duration: 5000,
         });
@@ -69,8 +69,9 @@ const Task = () => {
         showMessage({
           message: 'Failed to add todo. Please try again later!',
           type: 'danger',
-          hideStatusBar: true,
+          statusBarHeight: 50,
           icon: 'danger',
+          duration: 5000,
         });
       }
     } else {
@@ -90,7 +91,11 @@ const Task = () => {
   };
 
   useEffect(() => {
-    setTodayDate(`${year}-${month}-${days}`);
+    setTodayDate(
+      `${year}-${month.toString().length === 1 ? `0${month}` : month}-${
+        days.toString().length === 1 ? `0${days}` : days
+      }`,
+    );
   }, []);
 
   useEffect(() => {
