@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import moment from 'moment';
-import { StyleSheet } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 
 import FloatingButton from '../components/FloatingButton/FloatingButton';
-import { View } from '../components/Themed';
+import ListHomeMain from '../components/List/ListHome';
 import { db } from '../config/firebase-config';
 import useAuthentication from '../hooks/useAuthentication';
 import { RootTabScreenProps } from '../types';
 import AllList from './AllLists/AllList';
 
+const { height } = Dimensions.get('window');
 const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
   const { userDetails } = useAuthentication();
 
@@ -40,7 +41,12 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
 
   return (
     <View style={styles.container}>
-      <AllList notes={notes} />
+      <View style={styles.task}>
+        <AllList notes={notes} />
+      </View>
+      <ScrollView>
+        <ListHomeMain />
+      </ScrollView>
       <FloatingButton visible />
     </View>
   );
@@ -60,5 +66,16 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  taskList: {
+    margin: 20,
+  },
+  task: {
+    height: height / 2,
+  },
+  edit: {
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });
