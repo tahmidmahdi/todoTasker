@@ -128,8 +128,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    width: '100%',
-    backgroundColor: Colors.light.disabled,
+    width: '85 %',
+    backgroundColor: '#959595',
+    alignSelf: 'flex-end',
   },
   disabled: {
     color: Colors.light.tabIconDefault,

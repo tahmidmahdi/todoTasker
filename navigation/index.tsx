@@ -16,6 +16,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ColorSchemeName, Pressable } from 'react-native';
 
+import SheetMain from '../components/BottomSheet/Sheet';
 import Colors from '../constants/Colors';
 import useAuthentication from '../hooks/useAuthentication';
 import useColorScheme from '../hooks/useColorScheme';
@@ -70,9 +71,17 @@ const RootNavigator: React.FC = () => {
             component={NotFoundScreen}
             options={{ title: 'Oops!' }}
           />
-          <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="Modal" component={ModalScreen} />
-          </Stack.Group>
+          <Stack.Screen
+            name="Sheet"
+            component={SheetMain}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Modal"
+            options={{ title: '' }}
+            component={ModalScreen}
+          />
         </>
       ) : (
         <Stack.Screen
@@ -116,7 +125,7 @@ const BottomTabNavigator = () => {
                 opacity: pressed ? 0.5 : 1,
               })}>
               <FontAwesome
-                name="info-circle"
+                name="wpexplorer"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}

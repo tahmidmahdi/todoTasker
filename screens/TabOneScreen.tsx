@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import moment from 'moment';
@@ -17,7 +17,6 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
 
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [todayDate, setTodayDate] = useState<string | undefined>();
 
   useEffect(() => {
     if (userDetails?.uid) {

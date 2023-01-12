@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import moment from 'moment';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { db } from '../../config/firebase-config';
@@ -86,6 +87,7 @@ const ListMain: React.FC<{
       const q = query(
         collection(db, 'todos'),
         where('uid', '==', userDetails.uid),
+        where('time', '>=', moment().format('MMMM Do YYYY')),
       );
       const notesListenerSubscription = onSnapshot(q, querySnapshot => {
         const listName: Array<unknown> = [];
@@ -99,6 +101,7 @@ const ListMain: React.FC<{
     }
     return () => null;
   }, [userDetails?.uid]);
+  console.log(notes, '()()');
 
   return (
     <FlatList

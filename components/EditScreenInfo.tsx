@@ -1,7 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import Colors from '../constants/Colors';
 import MonoText from './StyledText';
 import { Text, View } from './Themed';
 
@@ -12,7 +11,7 @@ const EditScreenInfo = ({ path }: { path: string }) => (
         style={styles.getStartedText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)">
-        Open up the code for this screen:
+        Manage your daily todo list easily
       </Text>
 
       <View
@@ -26,18 +25,14 @@ const EditScreenInfo = ({ path }: { path: string }) => (
         style={styles.getStartedText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)">
-        Change any of the text, save the file, and your app will automatically
-        update.
+        Daily task management made easy
       </Text>
-    </View>
-
-    <View style={styles.helpContainer}>
-      <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-        <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-          Tap here if your app doesn&apos;t automatically update after making
-          changes
-        </Text>
-      </TouchableOpacity>
+      <View
+        style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
+        darkColor="rgba(255,255,255,0.05)"
+        lightColor="rgba(0,0,0,0.05)">
+        <MonoText>Creator: Tahmid Mahdi</MonoText>
+      </View>
     </View>
   </View>
 );
