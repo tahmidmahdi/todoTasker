@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import moment from 'moment';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 import FloatingButton from '../components/FloatingButton/FloatingButton';
 import ListHomeMain from '../components/List/ListHome';
@@ -19,6 +20,7 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     if (userDetails?.uid) {
       const q = query(
         collection(db, 'todos'),
@@ -37,6 +39,8 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
     }
     return () => null;
   }, [userDetails?.uid]);
+
+  if (loading) return <ActivityIndicator color="black" />;
 
   return (
     <View style={styles.container}>
