@@ -38,6 +38,7 @@ const Task = () => {
   });
   const [calendarDate, setCalendarDate] = useState<string>('');
   const [listOpen, setListOpen] = useState<boolean>(false);
+  const [pressed, setPressed] = useState<boolean>(false);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -110,6 +111,12 @@ const Task = () => {
     }
   }, [listOpen, selectedOption.calendar]);
 
+  useEffect(() => {
+    if (pressed) {
+      setListOpen(false);
+    }
+  }, [pressed]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.main}>
@@ -130,6 +137,8 @@ const Task = () => {
             multiline
             setText={setText}
             style={{ marginLeft: 20 }}
+            onPressIn={() => setPressed(true)}
+            onPressOut={() => setPressed(false)}
           />
         </View>
 
@@ -179,11 +188,7 @@ const Task = () => {
             />
           )}
           {listOpen && (
-            <ListMain
-              todoTypes={todoTypes}
-              setTodoTypes={setTodoTypes}
-              setListOpen={setListOpen}
-            />
+            <ListMain todoTypes={todoTypes} setTodoTypes={setTodoTypes} />
           )}
         </View>
         <View>

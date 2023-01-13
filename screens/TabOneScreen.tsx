@@ -40,7 +40,17 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
     return () => null;
   }, [userDetails?.uid]);
 
-  if (loading) return <ActivityIndicator color="black" />;
+  if (loading)
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
 
   return (
     <View style={styles.container}>

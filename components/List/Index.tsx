@@ -21,8 +21,7 @@ interface ListProps {
 const ListMain: React.FC<{
   todoTypes: string;
   setTodoTypes: React.Dispatch<React.SetStateAction<string>>;
-  setListOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ todoTypes, setTodoTypes, setListOpen }) => {
+}> = ({ todoTypes, setTodoTypes }) => {
   const { userDetails } = useAuthentication();
 
   const [notes, setNotes] = useState<Array<ListProps>>([]);

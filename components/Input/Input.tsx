@@ -18,6 +18,8 @@ const Input: React.FC<{
     | 'url';
   multiline?: boolean;
   setText: React.Dispatch<React.SetStateAction<string>>;
+  onPressIn?: () => void;
+  onPressOut?: () => void;
   style?: TextStyle | ViewStyle;
 }> = ({
   placeholder,
@@ -26,6 +28,8 @@ const Input: React.FC<{
   keyboardType,
   multiline,
   setText,
+  onPressIn,
+  onPressOut,
   style,
 }) => {
   const styles = StyleSheet.create({
@@ -36,6 +40,7 @@ const Input: React.FC<{
   });
 
   const inputStyles = StyleSheet.compose(styles.input, styles.customStyle);
+
   return (
     <TextInput
       style={inputStyles}
@@ -45,6 +50,8 @@ const Input: React.FC<{
       keyboardType={keyboardType}
       multiline={multiline}
       onChange={event => setText(event.nativeEvent.text)}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
     />
   );
 };
