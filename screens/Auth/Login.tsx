@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Formik } from 'formik';
 import {
   ActivityIndicator,
   Dimensions,
@@ -16,15 +17,20 @@ import {
 } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as yup from 'yup';
 
 import { auth } from '../../config/firebase-config';
+import Colors from '../../constants/Colors';
 
 const { height } = Dimensions.get('window');
 
+interface FormType {
+  email: string;
+  password: string;
+}
+
 const Login: React.FC = () => {
   const navigation = useNavigation();
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const storeData = async (value: string) => {
@@ -35,14 +41,22 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleLogin = async (): Promise<void> => {
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email(`*Please enter a correct email`)
+      .required(`*Email is required`),
+    password: yup
+      .string()
+      .min(8, `*Password should be minimum 8 character`)
+      .required(`*Password is required`),
+  });
+
+  const handleFormSubmit = async (values: FormType) => {
+    const { email, password } = values;
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(
-        auth,
-        emailAddress,
-        password,
-      );
+      const response = await signInWithEmailAndPassword(auth, email, password);
 
       if (response.user.email) {
         storeData(response.user?.email)
@@ -83,54 +97,92 @@ const Login: React.FC = () => {
               resizeMode="contain"
             />
           </View>
-          <View>
-            <Text style={styles.loginLabel}>
-              Login <Text style={{ color: '#F45E6D' }}>*</Text>
-            </Text>
-            <TextInput
-              placeholder="email@email.com"
-              placeholderTextColor="#808080"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              onChange={event => setEmailAddress(event.nativeEvent.text)}
-              style={styles.input}
-            />
-          </View>
-          <View style={{ marginTop: 20 }}>
-            <Text style={styles.loginLabel}>
-              Password <Text style={{ color: '#F45E6D' }}>*</Text>
-            </Text>
-            <TextInput
-              placeholder="********"
-              placeholderTextColor="#808080"
-              autoCapitalize="none"
-              keyboardType="default"
-              secureTextEntry
-              onChange={event => setPassword(event.nativeEvent.text)}
-              style={styles.input}
-            />
-          </View>
-          <Pressable style={styles.loginButton} onPress={handleLogin as never}>
-            {!loading ? (
-              <Text
-                style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>
-                Login
-              </Text>
-            ) : (
-              <View style={styles.loadingSection}>
-                <ActivityIndicator size="small" color="white" />
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: 16,
-                    marginLeft: 10,
-                  }}>
-                  Loading...
-                </Text>
-              </View>
+          <Formik
+            validationSchema={loginValidationSchema}
+            initialValues={{ email: '', password: '' }}
+            onSubmit={values => handleFormSubmit(values)}>
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <>
+                <View>
+                  <Text style={styles.loginLabel}>
+                    Login <Text style={{ color: '#F45E6D' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    placeholder="email@email.com"
+                    placeholderTextColor="#808080"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    onChangeText={handleChange('email')}
+                    value={values.email}
+                    onBlur={handleBlur('email')}
+                    style={[
+                      styles.input,
+                      errors?.email && touched?.email && styles.errorBorder,
+                    ]}
+                  />
+                  {errors.email && touched.email && (
+                    <Text style={styles.errorText}>{errors.email}</Text>
+                  )}
+                </View>
+                <View style={{ marginTop: 20 }}>
+                  <Text style={styles.loginLabel}>
+                    Password <Text style={{ color: '#F45E6D' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    placeholder="********"
+                    placeholderTextColor="#808080"
+                    autoCapitalize="none"
+                    keyboardType="default"
+                    secureTextEntry
+                    value={values.password}
+                    onChangeText={handleChange('password')}
+                    style={[
+                      styles.input,
+                      errors.password && touched.password && styles.errorBorder,
+                    ]}
+                    onBlur={handleBlur('password')}
+                  />
+                  {errors.password && touched.password && (
+                    <Text style={styles.errorText}>{errors.password}</Text>
+                  )}
+                </View>
+                <Pressable
+                  style={styles.loginButton}
+                  onPress={handleSubmit as never}>
+                  {!loading ? (
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                      }}>
+                      Login
+                    </Text>
+                  ) : (
+                    <View style={styles.loadingSection}>
+                      <ActivityIndicator size="small" color="white" />
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontWeight: 'bold',
+                          fontSize: 16,
+                          marginLeft: 10,
+                        }}>
+                        Loading...
+                      </Text>
+                    </View>
+                  )}
+                </Pressable>
+              </>
             )}
-          </Pressable>
+          </Formik>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -181,5 +233,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.light.errorRed,
+  },
+  errorBorder: {
+    borderColor: Colors.light.errorRed,
+    borderWidth: 1,
   },
 });

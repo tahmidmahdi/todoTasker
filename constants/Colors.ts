@@ -15,6 +15,7 @@ export default {
     red: '#F45E6D',
     green: '#61DEA4',
     disabled: '#EBEFF5',
+    errorRed: '#E30000',
   },
   dark: {
     text: '#fff',
@@ -29,5 +30,6 @@ export default {
     red: '#F45E6D',
     green: '#61DEA4',
     disabled: '#EBEFF5',
+    errorRed: '#E30000',
   },
 };

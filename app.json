@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "todoTasker",
+    "name": "Todo Tasker",
     "slug": "todoTasker",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,25 +8,33 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/Logo.svg",
+      "image": "./assets/images/Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/Logo.svg",
+        "foregroundImage": "./assets/images/Logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tahmidmahdi.todoTasker"
     },
     "web": {
       "favicon": "./assets/images/Logo.svg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "23dc79a9-6160-4117-b674-6b1c9e1318ad"
+      }
     }
   }
 }
