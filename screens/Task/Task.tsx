@@ -190,10 +190,7 @@ const Task = () => {
             />
           )}
           {selectedOption.time && (
-            <DateTimePickerMain
-              selectedTime={selectedTime}
-              setSelectedTime={setSelectedTime}
-            />
+            <DateTimePickerMain setSelectedTime={setSelectedTime} />
           )}
           {listOpen && (
             <ListMain todoTypes={todoTypes} setTodoTypes={setTodoTypes} />
