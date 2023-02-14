@@ -27,7 +27,7 @@ const Task = () => {
 
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState('');
-  const [todoTypes, setTodoTypes] = useState<string>('inbox');
+  const [todoTypes, setTodoTypes] = useState<string>('general');
   const [visible, setVisible] = useState(false);
   const [todayDate, setTodayDate] = useState<string | undefined>();
   const [selectedOption, setSelectedOption] = useState<{

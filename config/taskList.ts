@@ -10,7 +10,7 @@ export interface taskListType {
 const taskList: Array<taskListType> = [
   {
     id: 1,
-    name: 'Inbox',
+    name: 'General',
     backgroundColor: Colors.light.disabled,
     color: Colors.light.black,
   },
@@ -37,6 +37,12 @@ const taskList: Array<taskListType> = [
     name: 'Personal',
     backgroundColor: Colors.light.purple,
     color: Colors.light.background,
+  },
+  {
+    id: 6,
+    name: 'Prayer',
+    backgroundColor: Colors.light.lightPink,
+    color: Colors.light.black,
   },
 ];
 
