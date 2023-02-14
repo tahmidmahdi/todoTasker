@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { Platform } from 'react-native';
 import { FAB } from 'react-native-paper';
 
 const FloatingButton: React.FC<{
@@ -19,6 +20,9 @@ const FloatingButton: React.FC<{
       visible={visible}
       icon={open ? 'close' : 'plus'}
       color="white"
+      style={{
+        bottom: Platform.OS === 'ios' ? -80 : -40,
+      }}
       fabStyle={{ backgroundColor: '#006CFF', bottom: 40 }}
       actions={[
         {
