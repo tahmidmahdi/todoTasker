@@ -11,6 +11,7 @@ import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CalendarMain from '../../components/Calendar/CalendarMain';
+import DateTimePickerMain from '../../components/DateTImePicker/DateTimePickerMain';
 import Input from '../../components/Input/Input';
 import ListMain from '../../components/List/Index';
 import RadioButton from '../../components/RadioButton/RadioButton';
@@ -39,6 +40,7 @@ const Task = () => {
   const [calendarDate, setCalendarDate] = useState<string>('');
   const [listOpen, setListOpen] = useState<boolean>(false);
   const [pressed, setPressed] = useState<boolean>(false);
+  const [selectedTime, setSelectedTime] = useState<string>('');
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -185,6 +187,12 @@ const Task = () => {
             <CalendarMain
               setCalendarDate={setCalendarDate}
               todayDate={todayDate}
+            />
+          )}
+          {selectedOption.time && (
+            <DateTimePickerMain
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
             />
           )}
           {listOpen && (
