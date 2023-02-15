@@ -25,6 +25,7 @@ interface ListProps {
   time: string;
   todo: string;
   types: string;
+  clockTime: string;
   uid: string;
 }
 const ListHomeMain: React.FC = () => {
