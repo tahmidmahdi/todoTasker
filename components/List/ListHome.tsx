@@ -137,14 +137,17 @@ const ListHomeMain: React.FC = () => {
   }, [notes, selected]);
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        flexGrow: 1,
+      }}>
       <FlatList
         data={taskList}
         renderItem={list}
         keyExtractor={item => item.name}
         ItemSeparatorComponent={handleSeparator}
         contentContainerStyle={{
-          flex: 1,
           justifyContent: 'flex-end',
           marginTop: 0,
         }}
