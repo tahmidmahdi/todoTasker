@@ -1,4 +1,5 @@
-import * as WebBrowser from 'expo-web-browser';
+import React from 'react';
+
 import { StyleSheet } from 'react-native';
 
 import MonoText from './StyledText';
@@ -38,14 +39,6 @@ const EditScreenInfo = ({ path }: { path: string }) => (
 );
 
 export default EditScreenInfo;
-
-const handleHelpPress = () => {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet',
-  )
-    .then(() => console.log('Success'))
-    .catch(error => console.log(error));
-};
 
 const styles = StyleSheet.create({
   getStartedContainer: {

@@ -11,6 +11,7 @@ import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CalendarMain from '../../components/Calendar/CalendarMain';
+import DateTimePickerMain from '../../components/DateTImePicker/DateTimePickerMain';
 import Input from '../../components/Input/Input';
 import ListMain from '../../components/List/Index';
 import RadioButton from '../../components/RadioButton/RadioButton';
@@ -26,7 +27,7 @@ const Task = () => {
 
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState('');
-  const [todoTypes, setTodoTypes] = useState<string>('inbox');
+  const [todoTypes, setTodoTypes] = useState<string>('general');
   const [visible, setVisible] = useState(false);
   const [todayDate, setTodayDate] = useState<string | undefined>();
   const [selectedOption, setSelectedOption] = useState<{
@@ -39,6 +40,8 @@ const Task = () => {
   const [calendarDate, setCalendarDate] = useState<string>('');
   const [listOpen, setListOpen] = useState<boolean>(false);
   const [pressed, setPressed] = useState<boolean>(false);
+  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [currentTime, setCurrentTime] = useState<string>();
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -56,6 +59,7 @@ const Task = () => {
           completed: checked,
           types: todoTypes,
           time: calendarDate || moment().format('MMMM Do YYYY'),
+          clockTime: selectedTime !== '' ? selectedTime : currentTime,
           uid: userDetails?.uid,
         });
         showMessage({
@@ -92,6 +96,12 @@ const Task = () => {
   };
 
   useEffect(() => {
+    const timeNow = moment().format();
+    const timeWithGMT = moment(timeNow).format('HH:mm:ss');
+    setCurrentTime(timeWithGMT);
+  }, []);
+
+  useEffect(() => {
     setTodayDate(
       `${year}-${month.toString().length === 1 ? `0${month}` : month}-${
         days.toString().length === 1 ? `0${days}` : days
@@ -110,6 +120,15 @@ const Task = () => {
       setListOpen(false);
     }
   }, [listOpen, selectedOption.calendar]);
+
+  useEffect(() => {
+    if (selectedTime !== '') {
+      setSelectedOption({
+        ...selectedOption,
+        time: !selectedOption.time,
+      });
+    }
+  }, [selectedTime]);
 
   useEffect(() => {
     if (pressed) {
@@ -186,6 +205,9 @@ const Task = () => {
               setCalendarDate={setCalendarDate}
               todayDate={todayDate}
             />
+          )}
+          {selectedOption.time && (
+            <DateTimePickerMain setSelectedTime={setSelectedTime} />
           )}
           {listOpen && (
             <ListMain todoTypes={todoTypes} setTodoTypes={setTodoTypes} />

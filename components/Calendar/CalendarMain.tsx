@@ -8,6 +8,7 @@ const CalendarMain: React.FC<{
   todayDate?: string;
   setCalendarDate: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ todayDate, setCalendarDate }) => {
+  console.log('🚀 ~ file: CalendarMain.tsx:11 ~ todayDate', todayDate);
   const [date, setDate] = useState<string>('');
 
   useEffect(() => {

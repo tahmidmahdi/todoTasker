@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { doc, updateDoc } from 'firebase/firestore';
+import moment from 'moment';
 import {
   FlatList,
   StyleSheet,
@@ -20,6 +21,7 @@ export interface NotesTypes {
   completed: boolean;
   id: string;
   time: string;
+  clockTime: string;
   todo: string;
   types: string;
   uid: string;
@@ -60,26 +62,35 @@ const Item: React.FC<{
     }
   };
   return (
-    <TouchableOpacity
-      onPress={() => void handlePress(item)}
-      style={styles.item}>
-      <View style={styles.section}>
-        <RadioButton checked={item.completed} />
-        <Text style={[styles.title, item.completed && styles.disabled]}>
-          {item.todo}
+    <>
+      <TouchableOpacity
+        onPress={() => void handlePress(item)}
+        style={styles.item}>
+        <View>
+          <View style={styles.section}>
+            <RadioButton checked={item.completed} />
+            <Text style={[styles.title, item.completed && styles.disabled]}>
+              {item.todo}
+            </Text>
+          </View>
+        </View>
+        <View>
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: taskColor?.backgroundColor,
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+      <View style={styles.clockStyle}>
+        <Text style={styles.clockTime}>
+          {moment(item.clockTime, ['HH:mm']).format('hh:mm A')}
         </Text>
       </View>
-      <View>
-        <View
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            backgroundColor: taskColor?.backgroundColor,
-          }}
-        />
-      </View>
-    </TouchableOpacity>
+    </>
   );
 };
 
@@ -133,6 +144,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   disabled: {
+    color: Colors.light.tabIconDefault,
+  },
+  clockStyle: {
+    marginLeft: 50,
+    marginBottom: 10,
+    marginTop: -10,
+  },
+  clockTime: {
     color: Colors.light.tabIconDefault,
   },
 });

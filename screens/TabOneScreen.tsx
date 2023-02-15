@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import moment from 'moment';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import FloatingButton from '../components/FloatingButton/FloatingButton';
@@ -57,9 +57,7 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<'TabOne'>) => {
       <View style={styles.task}>
         <AllList notes={notes} />
       </View>
-      <ScrollView>
-        <ListHomeMain />
-      </ScrollView>
+      <ListHomeMain />
       <FloatingButton visible />
     </View>
   );
