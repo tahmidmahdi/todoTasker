@@ -135,7 +135,6 @@ const ListHomeMain: React.FC = () => {
       ),
     );
   }, [notes, selected]);
-  console.log(notes, '******', selected);
 
   return (
     <View>
